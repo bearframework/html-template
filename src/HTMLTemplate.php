@@ -10,7 +10,7 @@
 namespace BearFramework;
 
 /**
- * 
+ *
  */
 class HTMLTemplate
 {
@@ -33,7 +33,7 @@ class HTMLTemplate
         if ($this->htmlCode === '') {
             return '';
         }
-        $domDocument = new \IvoPetkov\HTML5DomDocument();
+        $domDocument = new \IvoPetkov\HTML5DOMDocument();
         $htmlCode = $this->htmlCode;
         foreach ($this->insertedData as $targetName => $targetHtmlCode) {
             $htmlCode = str_replace('{{' . $targetName . '}}', $domDocument->createInsertTarget($targetName), $htmlCode);
