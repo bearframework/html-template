@@ -15,34 +15,66 @@ namespace BearFramework;
 class HTMLTemplate
 {
 
-    private $htmlCode = '';
-    private $insertedData = [];
+    private $html = '';
+    private $pendingInserts = [];
 
-    public function __construct($htmlCode)
+    /**
+     * 
+     * @param string $html
+     */
+    public function __construct(string $html)
     {
-        $this->htmlCode = $htmlCode;
+        $this->html = $html;
     }
 
-    public function insert($name, $htmlCode)
+    /**
+     * 
+     * @param string $html
+     * @param string $target
+     * @return \BearFramework\HTMLTemplate Returns a reference to itself
+     */
+    public function insert(string $html, string $target = null): \BearFramework\HTMLTemplate
     {
-        $this->insertedData[$name] = $htmlCode;
+        $this->pendingInserts[] = [
+            'source' => $html,
+            'target' => $target
+        ];
+        return $this;
     }
 
-    public function getResult()
+    /**
+     * 
+     * @param string $html
+     * @return \BearFramework\HTMLTemplate Returns a reference to itself
+     */
+    public function set(string $html): \BearFramework\HTMLTemplate
     {
-        if ($this->htmlCode === '') {
+        $this->html = $html;
+        return $this;
+    }
+
+    /**
+     * 
+     * @return string
+     */
+    public function get(): string
+    {
+        if ($this->html === '') {
             return '';
         }
-        $domDocument = new \IvoPetkov\HTML5DOMDocument();
-        $htmlCode = $this->htmlCode;
-        foreach ($this->insertedData as $targetName => $targetHtmlCode) {
-            $htmlCode = str_replace('{{' . $targetName . '}}', $domDocument->createInsertTarget($targetName), $htmlCode);
+        if (!empty($this->pendingInserts)) {
+            $domDocument = new \IvoPetkov\HTML5DOMDocument();
+            foreach ($this->pendingInserts as $pendingInsert) {
+                if ($pendingInsert['target'] !== null) {
+                    $this->html = str_replace('{{' . $pendingInsert['target'] . '}}', $domDocument->createInsertTarget($pendingInsert['target']), $this->html);
+                }
+            }
+            $domDocument->loadHTML($this->html);
+            $domDocument->insertHTMLMulti($this->pendingInserts);
+            $this->pendingInserts = [];
+            $this->html = $domDocument->saveHTML();
         }
-        $domDocument->loadHTML($htmlCode);
-        foreach ($this->insertedData as $targetName => $targetHtmlCode) {
-            $domDocument->insertHTML($targetHtmlCode, $targetName);
-        }
-        return $domDocument->saveHTML();
+        return $this->html;
     }
 
 }

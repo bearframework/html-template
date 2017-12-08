@@ -24,15 +24,15 @@ class HTMLTemplateTest extends HTMLTemplateTestCase
                 . '<footer>{{footer}}</footer>'
                 . '</body>'
                 . '</html>');
-        $template->insert('body', '<html>'
+        $template->insert('<html>'
                 . '<head>'
                 . '<style>background-color:black;</style>'
                 . '</head>'
                 . '<body>Hello</body>'
-                . '</html>');
-        $template->insert('footer', '<body>The footer</body>');
+                . '</html>', 'body');
+        $template->insert('<body>The footer</body>', 'footer');
         $expectedResult = '<!DOCTYPE html><html><head><style>background-color:black;</style></head><body><div>Hello</div><footer>The footer</footer></body></html>';
-        $this->assertTrue($expectedResult === $template->getResult());
+        $this->assertTrue($expectedResult === $template->get());
     }
 
 }
