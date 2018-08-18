@@ -12,7 +12,7 @@ require __DIR__ . '/../vendor/autoload.php';
 /**
  * 
  */
-class HTMLTemplateTestCase extends PHPUnit_Framework_TestCase
+class HTMLTemplateTestCase extends PHPUnit\Framework\TestCase
 {
     
 }

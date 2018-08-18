@@ -31,7 +31,7 @@ class HTMLTemplateTest extends HTMLTemplateTestCase
                 . '<body>Hello</body>'
                 . '</html>', 'body');
         $template->insert('<body>The footer</body>', 'footer');
-        $expectedResult = '<!DOCTYPE html><html><head><style>background-color:black;</style></head><body><div>Hello</div><footer>The footer</footer></body></html>';
+        $expectedResult = '<!DOCTYPE html>' . "\n" . '<html><head><style>background-color:black;</style></head><body><div>Hello</div><footer>The footer</footer></body></html>';
         $this->assertTrue($expectedResult === $template->get());
     }
 
