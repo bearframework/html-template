@@ -9,6 +9,8 @@
 
 namespace BearFramework;
 
+use IvoPetkov\HTML5DOMDocument;
+
 /**
  *
  */
@@ -63,14 +65,21 @@ class HTMLTemplate
             return '';
         }
         if (!empty($this->pendingInserts)) {
-            $domDocument = new \IvoPetkov\HTML5DOMDocument();
+            $domDocument = new HTML5DOMDocument();
             foreach ($this->pendingInserts as $pendingInsert) {
                 if ($pendingInsert['target'] !== null) {
                     $this->html = str_replace('{{' . $pendingInsert['target'] . '}}', $domDocument->createInsertTarget($pendingInsert['target']), $this->html);
                 }
             }
-            $domDocument->loadHTML($this->html);
+            $domDocument->loadHTML($this->html, HTML5DOMDocument::ALLOW_DUPLICATE_IDS);
             $domDocument->insertHTMLMulti($this->pendingInserts);
+            $domDocument->modify(
+                    HTML5DOMDocument::FIX_DUPLICATE_METATAGS |
+                    HTML5DOMDocument::FIX_MULTIPLE_BODIES |
+                    HTML5DOMDocument::FIX_MULTIPLE_HEADS |
+                    HTML5DOMDocument::FIX_MULTIPLE_TITLES |
+                    HTML5DOMDocument::OPTIMIZE_HEAD
+            );
             $this->pendingInserts = [];
             $this->html = $domDocument->saveHTML();
         }
