@@ -10,7 +10,7 @@
 /**
  * @runTestsInSeparateProcesses
  */
-class HTMLTemplateTest extends HTMLTemplateTestCase
+class HTMLTemplateTest extends PHPUnit\Framework\TestCase
 {
 
     /**
@@ -19,20 +19,19 @@ class HTMLTemplateTest extends HTMLTemplateTestCase
     public function testConstructor()
     {
         $template = new BearFramework\HTMLTemplate('<html>'
-                . '<body>'
-                . '<div>{{body}}</div>'
-                . '<footer>{{footer}}</footer>'
-                . '</body>'
-                . '</html>');
+            . '<body>'
+            . '<div>{{body}}</div>'
+            . '<footer>{{footer}}</footer>'
+            . '</body>'
+            . '</html>');
         $template->insert('<html>'
-                . '<head>'
-                . '<style>background-color:black;</style>'
-                . '</head>'
-                . '<body>Hello</body>'
-                . '</html>', 'body');
+            . '<head>'
+            . '<style>background-color:black;</style>'
+            . '</head>'
+            . '<body>Hello</body>'
+            . '</html>', 'body');
         $template->insert('<body>The footer</body>', 'footer');
         $expectedResult = '<!DOCTYPE html>' . "\n" . '<html><head><style>background-color:black;</style></head><body><div>Hello</div><footer>The footer</footer></body></html>';
         $this->assertTrue($expectedResult === $template->get());
     }
-
 }
