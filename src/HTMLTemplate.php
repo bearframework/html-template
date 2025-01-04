@@ -35,7 +35,7 @@ class HTMLTemplate
      * @param string $target
      * @return \BearFramework\HTMLTemplate Returns a reference to itself
      */
-    public function insert(string $html, string $target = null): \BearFramework\HTMLTemplate
+    public function insert(string $html, ?string $target = null): \BearFramework\HTMLTemplate
     {
         $this->pendingInserts[] = [
             'source' => $html,
